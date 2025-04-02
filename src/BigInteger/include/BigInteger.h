@@ -53,7 +53,7 @@ private:
     static BigInteger sub(const BigInteger &lhs,const BigInteger &rhs);
 
     //* 长除法
-    static BigInteger divide(const BigInteger &lhs, const BigInteger &rhs);
+    static BigInteger divide(BigInteger &lhs, const BigInteger &rhs);
 
     //* 去掉最高位的0
     static void removeHighestZero(BigInteger &num);

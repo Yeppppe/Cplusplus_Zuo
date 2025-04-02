@@ -22,10 +22,10 @@ void testBigInteger()
         	cout << num1 + num2 << endl;        
         	cout << "the result of (num1 - num2):" << endl;        
         	cout << num1 - num2 << endl;        
-        	// cout << "the result of (num1 * num2):" << endl;        
-        	// cout << num1 * num2 << endl;        
-        	// cout << "the result of (num1 / num2):" << endl;        
-        	// cout << num1 / num2 << endl;        
+        	cout << "the result of (num1 * num2):" << endl;        
+        	cout << num1 * num2 << endl;        
+        	cout << "the result of (num1 / num2):" << endl;        
+        	cout << num1 / num2 << endl;        
         	// cout << "the result of (num1 % num2):" << endl;        
         	// cout << num1 % num2 << endl;        
         	// cout << endl;

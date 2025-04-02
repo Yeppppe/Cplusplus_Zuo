@@ -65,7 +65,85 @@ BigInteger BigInteger::operator - (const BigInteger& rhs) const{
     return result;
 }
 
+BigInteger& BigInteger::operator -= (const BigInteger& rhs){
+    *this = *this-rhs;
+    return *this; 
+}
 
+// * vector.resize()会直接改变当前vector内元素的数量，若new_size大于原size则增加元素数量，否则则减少元素数量
+//* 注意for循环下要用size_t 用int可能会导致位数不够？
+BigInteger BigInteger::operator * (const BigInteger& rhs) const{
+    BigInteger result;
+    result.m_bits.clear();
+    result.m_bits.resize(m_bits.size()+rhs.m_bits.size(),0);
+    for(size_t i =0; i < m_bits.size(); i++){
+        for(size_t j =0; j < rhs.m_bits.size(); j++){
+            int num = m_bits[i]*rhs.m_bits[j];
+            result.m_bits[i+j]+=num;
+        }
+    }
+    formatBits(result);
+    removeHighestZero(result);
+    return result;
+}
+
+BigInteger& BigInteger::operator *= (const BigInteger& rhs){
+    *this = *this * rhs;
+    return *this;
+}
+
+BigInteger BigInteger::operator / (const BigInteger& rhs) const{
+    if(rhs == BigInteger(0))
+        throw std::runtime_error("Divisor cannot be 0!");
+    
+    BigInteger tmp = *this;
+    return divide(tmp,rhs);
+}
+
+//* 这个很妙 得自己思考下
+BigInteger BigInteger::divide(BigInteger &lhs, const BigInteger &rhs){
+    if(lhs < rhs){
+        std::cout << "num1 < num2";
+        return 0;
+    }
+    BigInteger result;
+    int maxSize = lhs.m_bits.size() - rhs.m_bits.size();
+
+    BigInteger multiple,product;
+    while(lhs >= rhs){
+        multiple.m_bits.clear();
+        multiple.m_bits.resize(maxSize + 1, 0);
+        multiple.m_bits[maxSize] = 1;
+        product = rhs * multiple;
+
+        while(lhs >= product){
+            lhs -= product;
+            result += multiple;
+        }
+        maxSize--;
+    }
+    return result;
+}
+
+
+void BigInteger::formatBits(BigInteger &num){
+    int carry = 0;
+    for(int i = 0; i < num.m_bits.size(); i++){
+        int tmp = num.m_bits[i] + carry;
+        num.m_bits[i] = tmp % BASE;
+        carry = tmp / BASE;
+    }
+    while(carry!=0){
+        num.m_bits.push_back(carry % BASE);
+        carry = carry/BASE;
+    }
+}
+
+void BigInteger::removeHighestZero(BigInteger &num)
+{    
+	while (num.m_bits.size() > 1 && num.m_bits.back() == 0)        
+		num.m_bits.pop_back();
+}
 
 //* 静态成员函数在类外定义是无需再加上static
 BigInteger BigInteger::sub(const BigInteger &lhs,const BigInteger &rhs){
@@ -83,6 +161,7 @@ BigInteger BigInteger::sub(const BigInteger &lhs,const BigInteger &rhs){
         result.m_bits.push_back(num%BASE);
         carry = num/BASE - 1;
     }
+    removeHighestZero(result); 
     return result;
 }
 
@@ -98,6 +177,7 @@ bool BigInteger::operator > (const BigInteger& rhs) const{
     return false;
 }
 
+
 //* vector容器可以直接比较！
 bool BigInteger::operator == (const BigInteger& rhs) const{
     // if(m_bits.size()!=rhs.m_bits.size()){
@@ -108,14 +188,17 @@ bool BigInteger::operator == (const BigInteger& rhs) const{
     //         return false;
     // }
     // return true;
-
-    return m_bits==rhs.m_bits;  
+    return m_bits == rhs.m_bits;  
 }
 
-bool BigInteger::operator != (const BigInteger& rhs) const{
-    return !(*this == rhs);
-}
+// bool BigInteger::operator != (const BigInteger& rhs) const{
+//     return !(*this == rhs);
+// }
 
+bool BigInteger::operator != (const BigInteger &rhs) const
+{    
+	return m_bits != rhs.m_bits;
+}
 
 bool BigInteger::operator >= (const BigInteger& rhs) const{
     return (*this > rhs || *this == rhs);
@@ -123,16 +206,6 @@ bool BigInteger::operator >= (const BigInteger& rhs) const{
 
 //* 注意代码复用！ 避免重复造轮子
 bool BigInteger::operator < (const BigInteger& rhs) const{
-    // if(m_bits.size()!=rhs.m_bits.size()){
-    //     return m_bits.size()<rhs.m_bits.size();
-    // }
-
-    // for(int i = m_bits.size()-1;i>=0;i--){
-    //     if(m_bits[i]!=rhs.m_bits[i])
-    //         return m_bits[i]<rhs.m_bits[i];
-    // }
-    // return false;
-
     return !(*this >= rhs);
 }
 
