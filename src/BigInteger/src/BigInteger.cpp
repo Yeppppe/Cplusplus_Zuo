@@ -103,29 +103,41 @@ BigInteger BigInteger::operator / (const BigInteger& rhs) const{
 //* 这个很妙 得自己思考下
 BigInteger BigInteger::divide(BigInteger &lhs, const BigInteger &rhs) {
     if (lhs < rhs) {
-        std::cout << "num1 < num2";
-        return 0;
+        return BigInteger(0);
     }
+    if (rhs == BigInteger(0)) {
+        throw std::runtime_error("Division by zero");
+    }
+    
     BigInteger result;
     int maxSize = lhs.m_bits.size() - rhs.m_bits.size();
 
     // 确保 maxSize 不为负数
     if (maxSize < 0) {
-        return 0;
+        return BigInteger(0);
     }
 
     BigInteger multiple, product;
-    while (lhs >= rhs && maxSize >= 0) { // 添加 maxSize 边界条件
+    while (lhs >= rhs && maxSize >= 0) {
         multiple.m_bits.clear();
-        multiple.m_bits.resize(maxSize + 1, 0); // 确保 maxSize 合法
-        multiple.m_bits[maxSize] = 1;
+        multiple.m_bits.resize(maxSize + 1, 0);
+        if (maxSize >= 0 && maxSize < multiple.m_bits.size()) {
+            multiple.m_bits[maxSize] = 1;
+        } else {
+            break;
+        }
+        
         product = rhs * multiple;
+        if (product > lhs) {
+            maxSize--;
+            continue;
+        }
 
         while (lhs >= product) {
             lhs -= product;
             result += multiple;
         }
-        maxSize--; // 确保 maxSize 不越界
+        maxSize--;
     }
     return result;
 }
