@@ -169,3 +169,64 @@ int main() {
     
     return 0;
 }
+
+
+// 先序序列化和反序列化
+class Codec {
+public:
+    // 序列化
+    string serialize(TreeNode* root) {
+        string builder;
+        f(root, builder);
+        return builder;
+    }
+
+    void f(TreeNode* root, string& builder) {
+        if (root == nullptr) {
+            builder += "#,";
+        } else {
+            builder += to_string(root->val) + ",";
+            f(root->left, builder);
+            f(root->right, builder);
+        }
+    }
+
+    // 反序列化
+    TreeNode* deserialize(const string& data) {
+        vector<string> vals = split(data, ',');
+        cnt = 0;
+        return g(vals);
+    }
+
+    // 静态成员变量，记录当前数组消费到哪了
+    static int cnt;
+
+    TreeNode* g(const vector<string>& vals) {
+        string cur = vals[cnt++];
+        if (cur == "#") {
+            return nullptr;
+        } else {
+            TreeNode* head = new TreeNode(stoi(cur));
+            head->left = g(vals);
+            head->right = g(vals);
+            return head;
+        }
+    }
+
+    // 字符串分割工具
+    vector<string> split(const string& s, char delim) {
+        vector<string> result;
+        //* stringstream 是C++标准库中的一个类，用于将字符串转换成一个字符串流
+        stringstream ss(s);
+        string item;
+        //* std::getline(istream& is, string& str, char delim)
+        //* 输入流为is 每次遇到分隔符delim 就将分隔符前面的数据放入str中
+        while (getline(ss, item, delim)) {
+            result.push_back(item);
+        }
+        return result;
+    }
+};
+
+// 静态成员变量初始化
+int Codec::cnt = 0;
