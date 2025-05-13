@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Definition for a binary tree node.
+// Definition for a binary tree node.
 struct TreeNode {
     int val;
     TreeNode *left;

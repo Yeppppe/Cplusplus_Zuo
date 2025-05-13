@@ -15,6 +15,7 @@ struct TreeNode{
 }
 
 
+//* 先序的第一个对应头节点  对应查找中序的头节点位置   中序头节点位置左边都是头节点的子树，就能够在先序中拿到左树对应的位置，右树同理，一次递归调用
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
