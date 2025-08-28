@@ -120,4 +120,3 @@ int get_random(int l , int r){
    std::uniform_int_distribution<int> dist(l,r);
    return dist(gen);
 }
-
