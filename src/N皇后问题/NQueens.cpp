@@ -1,5 +1,8 @@
 // N皇后问题
 // 测试链接 : https://leetcode.cn/problems/n-queens-ii/
+#include <vector>
+#include <algorithm>
+using namespace std;
 
 class Solution {
 private:
@@ -39,7 +42,7 @@ public:
 
 
 //* 位运算版本 快很多
-class Solution {
+class Solution1 {
 
 public:
     int totalNQueens(int n) {
