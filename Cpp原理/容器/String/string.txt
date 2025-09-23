@@ -1,0 +1,68 @@
+string::append() 追加方法
+
+1. 追加若干个同一字符
+    string& append(size_t count, char ch);          // 追加 count 个 ch
+2. 追加 另一个 string
+    string& append(const string& str);              // 追加整个 str
+    string& append(const string& str, size_t pos, size_t count = npos);    // 追加 str[pos..pos+count)
+3. 追加C字符串
+    string& append(const char* s);                  // 追加以 '\0' 结尾的 C 字符串
+    string& append(const char* s, size_t count);    // 从 s 起追加 count 个字符（可包含 '\0'）
+
+常用示例
+string s = "Hello";
+1. s.append(3, '!');      // Hello!!!
+
+2. string t = "abcdef";
+   s.append(t);          // 追加全部 "abcdef"
+   s.append(t, 2, 3);    //  追加 "cde" pos = 2 , cnt = 3
+
+3. 追加区间
+    std::vector<char> buf = {'[','A',']'};
+    s.append(buf.begin(), buf.end()); // 追加 "[A]"
+
+
+
+
+string::data() 方法
+.data() 返回字符串内部字符数组的指针；C++11 起保证 null 结尾，C++17 起还允许通过非 const 重载直接修改内容。
+
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string s = "hello";
+
+    // 读取
+    const char* p1 = s.data();
+    std::cout << p1 << "\n";   // "hello"
+
+    // 修改（C++17 起）
+    char* p2 = s.data();
+    p2[0] = 'H';
+    std::cout << s << "\n";    // "Hello"
+
+    // 与 c_str 一样可以传给 C API
+    printf("%s\n", s.data());  // Hello
+}
+
+
+
+string::clear方法 
+void clear() noexcept;   // 是多种容器共有的方法，对于string会清空字符串，把size()变成0  但是不会释放容量 capacity()不变，内部缓冲区依旧保留，可以继续复用
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "Hello, world!";
+    cout << s << " (size=" << s.size() << ", cap=" << s.capacity() << ")\n";
+
+    s.clear();
+    cout << "\"" << s << "\" (size=" << s.size() << ", cap=" << s.capacity() << ")\n";
+
+    s = "Hi!";
+    cout << s << " (size=" << s.size() << ", cap=" << s.capacity() << ")\n";
+}
+
+ 

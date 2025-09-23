@@ -1,0 +1,9 @@
+#!/bin/bash
+
+wc -l ./nowcoder.txt | awk '{print $1}'
+
+# awk 'pattern {action}' file1 file2
+#     pattern: 满足条件的记录会被处理
+#     {action} : 当匹配事要执行的语句(可省略，默认打印整行)
+
+# awk '{print $1}' : 表示打印第一列 : awk '{print $1}' file

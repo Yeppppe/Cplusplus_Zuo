@@ -1,0 +1,5 @@
+#!/bin/bash
+
+awk "NR==5" nowcoder.txt
+
+

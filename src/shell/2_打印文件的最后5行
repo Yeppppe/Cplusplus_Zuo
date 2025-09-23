@@ -1,0 +1,19 @@
+#!/bin/bash
+
+tail -5 ./nowcoder.txt
+
+
+基本用法：
+tail filename   默认打印filename文件的最后10行内容
+
+tail -n 20 filename 指定数量的行进行打印:打印最后20行
+
+tail -n +20 filename  : 表示从第20行还是输出直到最后一行
+
+tail -f /car/log/syslog : 表示持续输出新增内容(-f 选项)
+
+
+
+复合使用
+grep "error" /var/log.syslog | tail -n 10      显示log中包含error的最后10行
+
